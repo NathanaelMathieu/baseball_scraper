@@ -12,7 +12,7 @@ def get_soup(start_season, end_season, league, qual, ind):
 
 def get_table(soup, ind):
     tables = soup.find_all('table')
-    table = tables[11]
+    table = tables[16]
     data = []
     # pulls headings from the fangraphs table
     headings = []
