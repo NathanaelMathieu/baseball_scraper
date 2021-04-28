@@ -35,18 +35,13 @@ def get_table(soup, ind):
 
     # replace emptry strings with NaN
     data.replace(r'^\s*$', np.nan, regex=True, inplace = True)
-
-    # convert all percent strings to proper percetages
-    percentages = ['Contact% (pi)', 'Zone% (pi)','Z-Contact% (pi)','O-Contact% (pi)','Swing% (pi)','Z-Swing% (pi)','O-Swing% (pi)','SL% (pi)','SI% (pi)','SB% (pi)','KN% (pi)','FS% (pi)','FC% (pi)','FA% (pi)','CU% (pi)','CS% (pi)','CH% (pi)','TTO%','Hard%','Med%','Soft%','Oppo%','Cent%','Pull%','K-BB%','Zone% (pfx)','Contact% (pfx)','Z-Contact% (pfx)','O-Contact% (pfx)','Swing% (pfx)','Z-Swing% (pfx)','O-Swing% (pfx)','UN% (pfx)','KN% (pfx)','SC% (pfx)','CH% (pfx)','EP% (pfx)','KC% (pfx)','CU% (pfx)','SL% (pfx)','SI% (pfx)','FO% (pfx)','FS% (pfx)','FC% (pfx)','FT% (pfx)','FA% (pfx)','BB%','K%','SwStr%','F-Strike%','Zone%','Contact%','Z-Contact%','O-Contact%','Swing%','Z-Swing%','O-Swing%','XX%','KN%','SF%','CH%','CB%','CT%','SL%','FB%','BUH%','IFH%','HR/FB','IFFB%','GB%','LD%','LOB%', 'XX% (pi)', 'PO%']
-    for col in percentages:
+    for col in data.columns:
         # skip if column is all NA (happens for some of the more obscure stats + in older seasons)
-        if data[col].count()>0:
-            data[col] = data[col].str.strip(' %')
-            data[col] = data[col].str.strip('%')
-            data[col] = data[col].astype(float)/100.
-        else:
-            #print(col)
-            pass
+        if data[col].count() > 0 and col not in ['Name', 'Team', 'Age Rng', 'Dollars']:
+            if(col.find("%") > 0 or col == "HR/FB"):
+                data[col] = data[col].str.strip(' %')
+                data[col] = data[col].str.strip('%')
+                data[col] = data[col].astype(float)/100.
 
     #convert everything except name and team to numeric
     cols_to_numeric = [col for col in data.columns if col not in ['Name', 'Team', 'Age Rng', 'Dollars']]
